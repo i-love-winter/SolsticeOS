@@ -3,6 +3,6 @@ My custom os I'm working on, I've just started working on it, I'm currently usin
 My current goal is to get a simple terminal working, and then keep building it up from there.
 
 Goals:
-  Getting UEFI to work
+  Getting UEFI to work.
   Getting inputs working
   
