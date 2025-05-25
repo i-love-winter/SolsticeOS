@@ -1,4 +1,5 @@
 make:
+	nasm "src/zeroes.asm" -f bin -o "build/zeroes.bin"
 	i386-elf-gcc -ffreestanding -m32 -g -c "src/kernel/kernel.c" -o "build/kernel.o"
 	echo "Kernel object created"
 	nasm "src/kernel_entry.asm" -f elf -o "build/kernel_entry.o"
