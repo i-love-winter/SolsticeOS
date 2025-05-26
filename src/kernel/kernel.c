@@ -1,4 +1,5 @@
-extern void main() {
-  *(char*)0xb8000 = 'A';
-  return;
+#include "includes/printf.h"
+
+void _putchar(char character) {
+  
 }
