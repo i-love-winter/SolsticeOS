@@ -1,5 +1,8 @@
 #include "includes/printf.h"
 
-void _putchar(char character) {
-  
+void main() {
+  printf("########################\n");
+  printf("# This OS Needs A Name #\n")
+  printf("########################")
+  return;
 }
