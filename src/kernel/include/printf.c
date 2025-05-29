@@ -38,7 +38,10 @@
 
 // define this globally (e.g. gcc -DPRINTF_INCLUDE_CONFIG_H ...) to include the
 // printf_config.h header file
-// default: undefined
+// default: undefined#define PRINTF_DEFINE_CUSTOM_PUTCHAR 1
+extern void _putchar(char c); // fixing random stuff
+#define PRINTF_DEFINE_CUSTOM_PUTCHAR 1 // still fixing random stuff
+
 #ifdef PRINTF_INCLUDE_CONFIG_H
 #include "printf_config.h"
 #endif
