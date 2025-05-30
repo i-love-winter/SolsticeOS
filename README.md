@@ -6,3 +6,4 @@ I am using the printf function here  -> https://github.com/mpaland/printf/tree/m
 To run, download the files and run:
   make clean
   make
+  qemu-system-i386 -drive format=raw,file=build/This\ OS\ Needs\ a\ Name.bin -serial stdio
