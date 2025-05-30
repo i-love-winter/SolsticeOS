@@ -20,19 +20,32 @@ void _putchar(char c) {
 }
 
 void vga_print(const char *str) {
-    volatile unsigned short *vidmem = (unsigned short *)0xB8000;
+    volatile unsigned short *vidmem = (unsigned short *)0xB8000; // VGA text buffer
+    int row = 0, col = 0;
+
     while (*str) {
-        *vidmem++ = (*str++ & 0xFF) | (0x07 << 8); // White text on black background
+        if (*str == '\n') {
+            row++; // Move down a row
+            col = 0; // Reset column position
+            vidmem = (volatile unsigned short *)0xB8000 + row * 80; // Move to start of next row
+        } else {
+            vidmem[col++] = (*str & 0xFF) | (0x07 << 8); // White text on black
+        }
+        str++;
     }
 }
 
 void main() {
     init_serial();
     _putchar('>');
-    printf("Hi from terminal!\n");
+    printf("Hi from terminal!");
+    vga_print("########################\n"
+              "# This OS Needs A Name #\n"
+              "########################\n"
+              "\n"
+              "$sh1: ");
+  
 
-    vga_print("Hi!");
-
-    while (1) { }
+    while (1) {}
 }
 
