@@ -39,13 +39,14 @@ void main() {
     init_serial();
     _putchar('>');
     printf("Hi from terminal!");
-    vga_print("########################\n"
-              "# This OS Needs A Name #\n"
-              "########################\n"
+    vga_print("###############\n"
+              "# Solstice OS #\n"
+              "###############\n"
               "\n"
-              "$sh1: ");
+              "$sh1.1: ");
   
 
     while (1) {}
+    return 1;
 }
 
