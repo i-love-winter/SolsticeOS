@@ -23,7 +23,7 @@ BOOT_BIN         := build/boot.bin
 KERNEL_ELF       := build/complete_kernel.elf
 KERNEL_BIN       := build/complete_kernel.bin
 EVERYTHING_BIN   := build/everything.bin
-FINAL_IMG        := "build/This\ OS\ Needs\ a\ Name.bin"
+FINAL_IMG        := "build/SolsticeOS.bin"
 
 all: $(FINAL_IMG)
 
