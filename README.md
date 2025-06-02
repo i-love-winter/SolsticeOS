@@ -16,5 +16,3 @@ To run, download the files and run:
   
   qemu-system-i386 -drive format=raw,file=build/SolsticeOS.bin -serial stdio
 
-Traffic milestones:
-  ~1 unique clone~
