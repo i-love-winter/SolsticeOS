@@ -16,3 +16,4 @@ To run, download the files and run:
   
   qemu-system-i386 -drive format=raw,file=build/SolsticeOS.bin -serial stdio
 
+If you want to use my project or some part of it in your project, please link it on your project
