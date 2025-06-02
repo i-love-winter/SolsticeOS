@@ -35,7 +35,7 @@ void vga_print(const char *str) {
     }
 }
 
-void main() {
+int main() {
     init_serial();
     _putchar('>');
     printf("Hi from terminal!");
