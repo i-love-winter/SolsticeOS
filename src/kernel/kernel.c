@@ -1,5 +1,6 @@
 #include "include/printf.h"
 #include "include/io.h"
+#include "gdt/gdt.h"
 
 #define SERIAL_PORT 0x3F8 // COM1
 
@@ -37,8 +38,9 @@ void vga_print(const char *str) {
 
 int main() {
     init_serial();
-    _putchar('>');
-    printf("Hi from terminal!");
+    initGdt();
+    printf("GDT initialised \n");
+    _putchar('>'); // just some testing, can't remember why I did this but it must be important ^_^
     vga_print("###############\n"
               "# Solstice OS #\n"
               "###############\n"
@@ -49,4 +51,5 @@ int main() {
     while (1) {}
     return 1;
 }
+
 
