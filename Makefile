@@ -1,66 +1,35 @@
-# Makefile for "This OS Needs a Name"
-
-BUILD_DIR := $(shell pwd)/build
-
-CC       := i386-elf-gcc
-NASM     := nasm
-OBJCOPY  := i386-elf-objcopy
-
-LIBGCC   := $(shell i386-elf-gcc -print-libgcc-file-name)
-
-CFLAGS   := -ffreestanding -m32 -g -I src/kernel/include
-LDFLAGS  := -ffreestanding -m32 -g -nostdlib -nostartfiles -Ttext 0x1000
-
-ASMFLAGS    := -f elf
-BINASMFLAGS := -f bin
-
-PRINTF_OBJ       := build/printf.o
-KERNEL_OBJ       := build/kernel.o
-KERNEL_ENTRY_OBJ := build/kernel_entry.o
-ZEROES_BIN       := build/zeroes.bin
-BOOT_BIN         := build/boot.bin
-
-KERNEL_ELF       := build/complete_kernel.elf
-KERNEL_BIN       := build/complete_kernel.bin
-EVERYTHING_BIN   := build/everything.bin
-FINAL_IMG        := "build/SolsticeOS.bin"
-
-all: $(FINAL_IMG)
+all: clean zeroes includes kernel boot image
 
 clean:
-	@rm -rf $(BUILD_DIR)
+	rm -rf build
+	mkdir build
 
-$(BUILD_DIR):
-	@mkdir -p $(BUILD_DIR)
+zeroes:
+	nasm src/other/zeroes.asm -f bin -o build/zeroes.bin
 
-$(ZEROES_BIN): src/other/zeroes.asm | $(BUILD_DIR)
-	$(NASM) $(BINASMFLAGS) $< -o $@
+includes:
+	i386-elf-gcc -ffreestanding -m32 -g -c src/kernel/include/printf.c -o build/printf.o
+	echo "Printf object created"
+	i386-elf-gcc -ffreestanding -m32 -g -c src/kernel/gdt/gdt.c -o build/gdt.o
+	echo "GDT object created"
+	nasm -f elf src/kernel/gdt/gdt.s -o build/gdts.o
+	echo "GDTS object created"
 
-$(BOOT_BIN): src/bootloader/boot.asm | $(BUILD_DIR)
-	$(NASM) $(BINASMFLAGS) $< -o $@
 
-$(PRINTF_OBJ): src/kernel/include/printf.c | $(BUILD_DIR)
-	$(CC) $(CFLAGS) -c $< -o $@
-	@echo "Printf object created"
+kernel:
+	i386-elf-gcc -ffreestanding -m32 -g -c src/kernel/kernel.c -o build/kernel.o
+	echo "Kernel object created"
+	nasm src/kernel/kernel_entry.asm -f elf -o build/kernel_entry.o 
+	echo "Kernel entry object created"
+	i386-elf-gcc -ffreestanding -m32 -g -nostdlib -nostartfiles -Ttext 0x1000 -o build/complete_kernel.elf build/kernel_entry.o build/kernel.o build/printf.o build/gdt.o build/gdts.o $(shell i386-elf-gcc -print-libgcc-file-name)
+	echo "Kernel linked to kernel entry and includes"
 
-$(KERNEL_OBJ): src/kernel/kernel.c | $(BUILD_DIR)
-	$(CC) $(CFLAGS) -c $< -o $@
-	@echo "Kernel object created"
+boot:
+	nasm src/bootloader/boot.asm -f bin -o build/boot.bin
 
-$(KERNEL_ENTRY_OBJ): src/kernel/kernel_entry.asm | $(BUILD_DIR)
-	$(NASM) $(ASMFLAGS) $< -o $@
-	@echo "Kernel entry object created"
-
-$(KERNEL_ELF): $(KERNEL_ENTRY_OBJ) $(KERNEL_OBJ) $(PRINTF_OBJ) | $(BUILD_DIR)
-	$(CC) $(LDFLAGS) -o $@ $^ $(LIBGCC)
-	@echo "Kernel and kernel entry linked"
-
-$(KERNEL_BIN): $(KERNEL_ELF)
-	$(OBJCOPY) -O binary $< $@
-
-$(EVERYTHING_BIN): $(BOOT_BIN) $(KERNEL_BIN)
-	cat $(BOOT_BIN) $(KERNEL_BIN) > $@
-
-$(FINAL_IMG): $(EVERYTHING_BIN) $(ZEROES_BIN)
-	cat $(EVERYTHING_BIN) $(ZEROES_BIN) > "$(FINAL_IMG)"
-	@echo "Final disk image created: $(FINAL_IMG)"
+image:
+	i386-elf-objcopy -O binary $< build/complete_kernel.elf
+	cat build/boot.bin build/complete_kernel.elf > build/everything.bin
+	cat build/everything.bin build/zeroes.bin > "build/SolsticeOS.iso"
+	echo "Final disk image created: build/SolsticeOS.iso"
+	mkisofs -o SolsticeOS.iso build/SolsticeOS.bin
