@@ -14,6 +14,6 @@ To run, download the files and run:
   
   make
   
-  qemu-system-i386 -drive format=raw,file=build/SolsticeOS.bin -serial stdio
+  qemu-system-i386 -drive format=raw,file=build/SolsticeOS.iso -serial stdio
 
 If you want to use my project or some part of it in your project, please link it on your project
