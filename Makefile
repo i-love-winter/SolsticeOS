@@ -22,7 +22,7 @@ kernel:
 	echo "Kernel object created"
 	nasm src/kernel/kernel_entry.asm -f elf -o build/kernel_entry.o 
 	echo "Kernel entry object created"
-	i386-elf-gcc -ffreestanding -m32 -g -nostdlib -nostartfiles -Ttext 0x1000 -o build/complete_kernel.elf build/kernel_entry.o build/kernel.o build/printf.o build/gdt.o build/gdts.o build/utils.o $(shell i386-elf-gcc -print-libgcc-file-name)
+	i386-elf-gcc -ffreestanding -m32 -g -nostdlib -nostartfiles -Ttext 0x1000 -o build/complete_kernel.elf build/kernel_entry.o build/kernel.o build/printf.o build/gdt.o build/utils.o $(shell i386-elf-gcc -print-libgcc-file-name)
 	echo "Kernel linked to kernel entry and includes"
 
 boot:
