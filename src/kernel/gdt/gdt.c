@@ -1,13 +1,15 @@
 #include <stdint.h>
 #include "gdt.h"
+#include "../utils/utils.h"
 
 extern void gdt_flush(uint32_t);
 
-struct gdt_entry_struct gdt_entries[5];
+struct gdt_entry_struct gdt_entries[6];
 struct gdt_ptr_struct gdt_ptr;
+struct tss_entry_struct tss_entry;
 
 void initGdt() {
-  gdt_ptr.limit = (sizeof(struct gdt_entry_struct) * 5) -1;
+  gdt_ptr.limit = (sizeof(struct gdt_entry_struct) * 6) -1;
   gdt_ptr.base = (uint32_t)&gdt_entries;
 
   setGdtGate(0,0,0,0,0); // null segment
@@ -18,14 +20,34 @@ void initGdt() {
 
   // 0x9A = 1001 1010
   // this sets out the right values for our kernel code segment's important stuff
-  // and is repeated for all other segments
+  // and is repeated for all other segments (including the task segment!)
   // e.g. Present bit = 1 (one bit)
   //      Descriptor privelige level = 0 (two bits)
   // etc.
 
-  gdt_flush((uint32_t)&gdt_ptr);
-}
+  writeTSS(5, 0x10, 0x0); // task state segment 
 
+  gdt_flush((uint32_t)&gdt_ptr);
+  tss_flush(); // this line doesn't work for some reason, need to figure out what's going on
+ }
+
+
+void writeTSS(uint32_t num, uint16_t ss0, uint32_t esp0) {
+  uint32_t base = (uint32_t) &tss_entry;
+  uint32_t limit = base + sizeof(&tss_entry);
+
+  setGdtGate(num, base, limit, 0xe9, 0x00);
+  memset(&tss_entry, 0, sizeof(tss_entry));
+
+  tss_entry.ss0 = ss0;
+  tss_entry.esp0 = esp0;
+
+  tss_entry.cs = 0x08 | 0x3;
+  tss_entry.ss = tss_entry.ds = tss_entry.es = tss_entry.fs = tss_entry.gs = 0x10 | 0x3;
+
+
+
+}
 
 void setGdtGate(uint32_t num, uint32_t base, uint32_t limit, uint8_t access, uint8_t gran) {
   // this takes the segment number, whether or not the segment grows up or down (the base), its limit, its access and the granulation
