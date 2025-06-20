@@ -10,10 +10,8 @@ zeroes:
 includes:
 	i386-elf-gcc -ffreestanding -m32 -g -c src/kernel/include/printf.c -o build/printf.o
 	echo "Printf object created"
-	i386-elf-gcc -ffreestanding -m32 -g -c src/kernel/gdt/gdt.c -o build/gdt.o
+	i386-elf-gcc -ffreestanding -m32 -g -nostdlib -nostartfiles -Ttext 0x1000 -o build/gdt.o src/kernel/gdt/gdt.s src/kernel/gdt/gdt.c
 	echo "GDT object created"
-	nasm -f elf src/kernel/gdt/gdt.s -o build/gdts.o
-	echo "GDTS object created"
 	i386-elf-gcc -ffreestanding -m32 -g -c src/kernel/utils/utils.c -o build/utils.o
 	echo "Utils object created"
 
