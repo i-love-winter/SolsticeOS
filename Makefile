@@ -30,6 +30,6 @@ boot:
 image:
 	i386-elf-objcopy -O binary $< build/complete_kernel.elf
 	cat build/boot.bin build/complete_kernel.elf > build/everything.bin
-	cat build/everything.bin build/zeroes.bin > "build/SolsticeOS.iso"
+	cat build/everything.bin build/zeroes.bin > "build/SolsticeOS.bin"
 	echo "Final disk image created: build/SolsticeOS.iso"
-	mkisofs -o SolsticeOS.iso build/SolsticeOS.bin
+	mkisofs -o build/SolsticeOS.iso build/SolsticeOS.bin
