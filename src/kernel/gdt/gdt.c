@@ -1,14 +1,14 @@
 #include <stdint.h>
 #include "gdt.h"
 
-extern void gdt_flush(void *addr_t);
+extern void gdt_flush(uint32_t);
 
 struct gdt_entry_struct gdt_entries[5];
 struct gdt_ptr_struct gdt_ptr;
 
 void initGdt() {
   gdt_ptr.limit = (sizeof(struct gdt_entry_struct) * 5) -1;
-  gdt_ptr.base = (unsigned int)&gdt_entries; // Force the conversion
+  gdt_ptr.base = (uint32_t)&gdt_entries;
 
   setGdtGate(0,0,0,0,0); // null segment
   setGdtGate(1,0, 0xFFFFFFFF,0x9A, 0xCF); // kernel code segment
@@ -23,7 +23,7 @@ void initGdt() {
   //      Descriptor privelige level = 0 (two bits)
   // etc.
 
-  gdt_flush(&gdt_ptr);
+  gdt_flush((uint32_t)&gdt_ptr);
 }
 
 
