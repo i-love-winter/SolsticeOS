@@ -33,4 +33,4 @@ image:
 	cat build/boot.bin build/complete_kernel.elf > build/everything.bin
 	cat build/everything.bin build/zeroes.bin > "build/SolsticeOS.bin"
 	echo "Final disk image created: build/SolsticeOS.iso"
-	mkisofs -o build/SolsticeOS.iso build/SolsticeOS.bin // I think there might be something wrong with this line as boooting the iso makes qemu crash out
+	mkisofs -o build/SolsticeOS.iso build/SolsticeOS.bin
