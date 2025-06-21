@@ -1,7 +1,7 @@
-#include "include/printf.c"
+#include "include/printf.h"
 #include "include/io.h"
-#include "utils/utils.c"
-#include "gdt/gdt.c"
+#include "utils/utils.h"
+#include "gdt/gdt.h"
 
 #define SERIAL_PORT 0x3F8 // COM1
 
@@ -36,6 +36,3 @@ int main() {
     while (1) {}
     return 1;
 }
-
-
-
