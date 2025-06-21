@@ -1,6 +1,7 @@
-#include "include/printf.h"
+#include "include/printf.c"
 #include "include/io.h"
-#include "gdt/gdt.h"
+#include "utils/utils.c"
+#include "gdt/gdt.c"
 
 #define SERIAL_PORT 0x3F8 // COM1
 
@@ -20,22 +21,6 @@ void _putchar(char c) {
     outb(SERIAL_PORT, c);
 }
 
-void vga_print(const char *str) {
-    volatile unsigned short *vidmem = (unsigned short *)0xB8000; // VGA text buffer
-    int row = 0, col = 0;
-
-    while (*str) {
-        if (*str == '\n') {
-            row++; // Move down a row
-            col = 0; // Reset column position
-            vidmem = (volatile unsigned short *)0xB8000 + row * 80; // Move to start of next row
-        } else {
-            vidmem[col++] = (*str & 0xFF) | (0x07 << 8); // White text on black
-        }
-        str++;
-    }
-}
-
 int main() {
     init_serial();
     initGdt();
@@ -45,11 +30,12 @@ int main() {
               "# Solstice OS #\n"
               "###############\n"
               "\n"
-              "$sh1.1: ");
+              );
   
 
     while (1) {}
     return 1;
 }
+
 
 
