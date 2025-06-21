@@ -1,9 +1,9 @@
 #include <stdint.h>
 #include "gdt.h"
 #include "../utils/utils.h"
-#include "gdt.s"
 
 extern void gdt_flush(uint32_t);
+extern void tss_flush();
 
 struct gdt_entry_struct gdt_entries[6];
 struct gdt_ptr_struct gdt_ptr;
@@ -29,7 +29,7 @@ void initGdt() {
   writeTSS(5, 0x10, 0x0); // task state segment 
 
   gdt_flush((uint32_t)&gdt_ptr);
-  tss_flush(); // this line doesn't work for some reason, need to figure out what's going on
+  tss_flush(); 
  }
 
 
