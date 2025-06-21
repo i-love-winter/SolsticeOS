@@ -1,6 +1,6 @@
 #include <stdint.h>
 #include "gdt.h"
-#include "../utils/utils.h"
+#include "../utils/utils.c"
 
 extern void gdt_flush(uint32_t);
 extern void tss_flush();
@@ -29,7 +29,7 @@ void initGdt() {
   writeTSS(5, 0x10, 0x0); // task state segment 
 
   gdt_flush((uint32_t)&gdt_ptr);
-  tss_flush(); 
+  tss_flush(); // this line doesn't work for some reason, need to figure out what's going on
  }
 
 
@@ -62,4 +62,5 @@ void setGdtGate(uint32_t num, uint32_t base, uint32_t limit, uint8_t access, uin
   gdt_entries[num].flags |= (gran & 0xF0);
 
   gdt_entries[num].access = access;
+}
 }
