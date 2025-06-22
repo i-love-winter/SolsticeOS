@@ -10,7 +10,7 @@ zeroes:
 includes:
 	i386-elf-gcc -ffreestanding -m32 -g -c src/kernel/include/printf.c -o build/printf.o
 	echo "Printf object created"
-	i386-elf-gcc -ffreestanding -m32 -g -c src/kernel/gdt/gdt.c -o build/gdt.o
+	i386-elf-gcc -ffreestanding -m32 -g -c src/kernel/gdt/gdt.c -o build/gdtc.o
 	nasm src/kernel/gdt/gdt.s -f elf -o build/gdts.o
 	echo "GDT OBJECT CREATED"
 	i386-elf-gcc -ffreestanding -m32 -g -c src/kernel/utils/utils.c -o build/utils.o
@@ -22,7 +22,7 @@ kernel:
 	echo "Kernel object created"
 	nasm src/kernel/kernel_entry.asm -f elf -o build/kernel_entry.o 
 	echo "Kernel entry object created"
-	i386-elf-gcc -ffreestanding -m32 -g -nostdlib -nostartfiles -Ttext 0x1000 -o build/complete_kernel.elf build/kernel_entry.o build/kernel.o build/printf.o build/gdt.o build/gdts.o build/utils.o $(shell i386-elf-gcc -print-libgcc-file-name)
+	i386-elf-gcc -ffreestanding -m32 -g -nostdlib -nostartfiles -Ttext 0x1000 -o build/complete_kernel.elf build/kernel_entry.o build/kernel.o build/printf.o build/gdtc.o build/gdts.o build/utils.o $(shell i386-elf-gcc -print-libgcc-file-name)
 	echo "Kernel linked to kernel entry and includes"
 
 boot:
