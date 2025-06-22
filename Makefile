@@ -11,9 +11,10 @@ includes:
 	i386-elf-gcc -ffreestanding -m32 -g -c src/kernel/include/printf.c -o build/printf.o
 	echo "Printf object created"
 	nasm src/kernel/gdt/gdt.s -f elf -o build/gdts.o
-	i386-elf-gcc -ffreestanding -m32 -g -nostdlib -nostartfiles -Ttext 0x1000 -o build/gdt.o build/gdts.o src/kernel/gdt/gdt.h
+	i386-elf-gcc -ffreestanding -m32 -g -c src/kernel/gdt/gdt.o -o build/gdtc.o
+	i386-elf-gcc -ffreestanding -m32 -g -nostdlib -nostartfiles -Ttext 0x1000 -o build/gdt.o build/gdts.o build/gdtc.o
 	echo "GDT object created"
-	i386-elf-gcc -ffreestanding -m32 -g -c src/kernel/utils/utils.h -o build/utils.o
+	i386-elf-gcc -ffreestanding -m32 -g -c src/kernel/utils/utils.c -o build/utils.o
 	echo "Utils object created"
 
 
