@@ -15,15 +15,17 @@ includes:
 	echo "GDT objects created"
 	i386-elf-gcc -ffreestanding -m32 -g -c src/kernel/utils/utils.c -o build/utils.o
 	echo "Utils object created"
-
+	i386-elf-gcc -ffreestanding -m32 -g -c src/kernel/interrupts/idt.c -o build/idt.o
+	nasm src/kernel/interrupts/idt.s -f elf -o build/idts.o
+	echo "IDT objects created"
 
 kernel:
 	i386-elf-gcc -ffreestanding -m32 -g -c src/kernel/kernel.c -o build/kernel.o
 	echo "Kernel object created"
 	nasm src/kernel/kernel_entry.asm -f elf -o build/kernel_entry.o 
 	echo "Kernel entry object created"
-	i386-elf-gcc -ffreestanding -m32 -g -nostdlib -nostartfiles -o build/complete_kernel.elf build/kernel_entry.o build/kernel.o build/printf.o build/gdtc.o build/gdts.o build/utils.o $(shell i386-elf-gcc -print-libgcc-file-name)
-	echo "Kernel linked to kernel entry and includes"
+	i386-elf-gcc -ffreestanding -m32 -g -nostdlib -nostartfiles -Ttext 0x1000 -o build/complete_kernel.elf build/kernel_entry.o build/kernel.o build/printf.o build/gdtc.o build/gdts.o build/utils.o build/idt.o build/idts.o $(shell i386-elf-gcc -print-libgcc-file-name)
+	echo "Kernel linked with object files"
 
 boot:
 	nasm src/bootloader/boot.asm -f bin -o build/boot.bin
