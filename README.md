@@ -1,4 +1,4 @@
-# SolsticeOS
+# SolsticeOS (currently on hold while I actually learn c)
 
 [yes the name was inspired by oneshot, absolutely fire game, buy it now](https://store.steampowered.com/app/420530/OneShot/)
 
