@@ -25,12 +25,10 @@ int main() {
     init_serial();
     initGdt();
     printf("GDT initialised \n");
-    _putchar('>'); // just some testing, can't remember why I did this but it must be important ^_^
+    _putchar('>'); // Just testing—can't remember why, but it must've been important. ^_^
     vga_print("###############\n"
-              "# Solstice OS #\n"
-              "###############\n"
-              "\n"
-              );
+          "# SolsticeOS  #\n"
+          "###############\n\n");
   
 
     while (1) {}
