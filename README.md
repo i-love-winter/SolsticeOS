@@ -1,7 +1,6 @@
 # SolsticeOS
-
-I'm using my own bootloader, made from scratch in ASM (x86).
-I believe it is currently in 32 bit protected mode, please correct me if I'm wrong.
+I'm using a custom bootloader, written from scratch in x86 Assembly.
+I believe it's currently running in 32-bit protected mode—please correct me if I'm wrong.
 I am using the printf function here  -> [A simple printf implimentation](https://github.com/mpaland/printf/tree/master).
 
 I'm trying to get my IDT working at the moment, and struggling with getting a cross-compiler working again on my new arch install lol
